@@ -80,4 +80,14 @@ require('lazy').setup({
       require('which-key').setup({})
     end,
   },
+
+  -- Buffer-style file/folder browser: `-` opens the parent dir; edit the
+  -- listing like text to create/rename/delete. Also takes over `nvim <dir>`.
+  {
+    'stevearc/oil.nvim',
+    config = function()
+      require('oil').setup()
+      vim.keymap.set('n', '-', '<cmd>Oil<cr>', { desc = 'Open parent directory (oil)' })
+    end,
+  },
 })
