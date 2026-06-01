@@ -153,6 +153,9 @@ uv_make_folder_context() {
 sz() {source ~/.zshrc; echo "✅sourced zshrc!"}
 vpipe() { nvim -R -c 'setlocal buftype=nofile bufhidden=wipe noswapfile' -; }
 vdiff() { nvim -R -c 'setlocal buftype=nofile bufhidden=wipe noswapfile ft=diff nowrap' -; }
+# Defer the picker to VimEnter so the prompt grabs focus/insert mode correctly
+vff() { nvim -c 'autocmd VimEnter * ++once Telescope find_files' }   # nvim straight into fuzzy file finder (rooted at cwd)
+vfg() { nvim -c 'autocmd VimEnter * ++once Telescope live_grep' }    # nvim straight into fuzzy content grep (rooted at cwd)
 wtprune() {
   local paths
   paths=(${(f)"$(git worktree list --porcelain 2>/dev/null \

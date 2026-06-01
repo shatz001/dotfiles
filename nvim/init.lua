@@ -39,4 +39,38 @@ require('lazy').setup({
       vim.keymap.set('n', '<C-p>',      builtin.find_files, { desc = 'Telescope: find files' })
     end,
   },
+
+  -- Start screen with pressable buttons (shown when you launch `nvim` with no file)
+  {
+    'goolord/alpha-nvim',
+    config = function()
+      local alpha = require('alpha')
+      local dashboard = require('alpha.themes.dashboard')
+      dashboard.section.header.val = { '', 'N E O V I M', '' }
+      dashboard.section.buttons.val = {
+        dashboard.button('f', 'Find file',  '<cmd>Telescope find_files<cr>'),
+        dashboard.button('g', 'Live grep',  '<cmd>Telescope live_grep<cr>'),
+        dashboard.button('e', 'New file',   '<cmd>ene <bar> startinsert<cr>'),
+        dashboard.button('q', 'Quit',       '<cmd>qa<cr>'),
+      }
+      -- Reminder of the editor shortcuts (leader = \)
+      dashboard.section.footer.val = {
+        '',
+        'find files:  Ctrl-p   or  <leader>ff',
+        'live grep:   <leader>fg',
+        'all keys:    press <leader> and wait  (which-key)',
+        '(leader = \\)',
+      }
+      alpha.setup(dashboard.config)
+    end,
+  },
+
+  -- Popup that lists available keybindings when you press <leader> and pause
+  {
+    'folke/which-key.nvim',
+    event = 'VeryLazy',
+    config = function()
+      require('which-key').setup({})
+    end,
+  },
 })

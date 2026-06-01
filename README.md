@@ -37,28 +37,7 @@ in `~/.config/nvim/init.lua` (real config lives in `nvim/init.lua`; this stub lo
 dofile(vim.fn.expand('~/dotfiles/nvim/init.lua'))
 ```
 Then run `nvim` once to let lazy.nvim install plugins (Telescope, etc.).
-
-# Neovim (Telescope fuzzy finder)
-<details>
-  <summary>click here</summary>
-
-`cd` into a project and launch `nvim` — that directory is the search root.
-
-Quick mental model:
-- **`Ctrl-p`** / **`<leader>ff`** = "I know roughly the *filename*."
-- **`<leader>fg`** = "I know some *text inside* a file."
-
-Keys inside the picker:
-| Key | Action |
-|-----|--------|
-| type | fuzzy-narrow the list live |
-| `Ctrl-n` / `Ctrl-p` | next / previous result |
-| `Enter` | open in current window |
-| `Ctrl-v` / `Ctrl-x` / `Ctrl-t` | vertical split / horizontal split / new tab |
-| `Ctrl-u` / `Ctrl-d` | scroll preview up / down |
-| `Esc` / `Ctrl-c` | close |
-
-</details>
+The start dashboard lists the key shortcuts; press `<leader>` and wait for the which-key popup.
 
 # For iTerm2
 - need to enable mouse reporting in iTerm2 settings
