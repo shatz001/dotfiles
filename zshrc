@@ -86,6 +86,15 @@ git_stat_since_base() {
 git_files_since_base() {
   git diff --name-only "$(git merge-base HEAD origin/main)" "$@"
 }
+# Pretty git log with author, weekday date, and branch decorations. First arg = count (default 10).
+git_log_pretty() {
+  local n=${1:-10}
+  shift 2>/dev/null
+  git log -n "$n" --graph --decorate --all \
+    --pretty=format:'%C(auto)%h%d %C(green)%ad %C(blue)%an%C(reset) %s' \
+    --date=format:'%a %d %b %Y' "$@"
+}
+alias glp=git_log_pretty
 
 # --- escape timeout in vim needs to be faster ---
 set -sg escape-time 10
@@ -269,4 +278,11 @@ wtmux_rm() {
       git branch -D "$branch" && echo "Deleted branch: $branch"
     fi
   done
+}
+git_diff_tui() {
+   git diff --stat | sed '$d' | fzf \
+   --delimiter='\s+\|\s+' \
+   --preview='git diff --color=always -- {1}' \
+   --preview-window='right,70%,wrap' \
+   --bind='enter:become(git diff --color=always -- {1} | less -R)'
 }
