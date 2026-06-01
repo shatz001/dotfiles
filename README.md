@@ -32,6 +32,12 @@ in `~/.tmux.conf`
 ```
 source-file ~/dotfiles/tmux.conf
 ```
+in `~/.config/nvim/init.lua` (real config lives in `nvim/init.lua`; this stub loads it)
+```
+dofile(vim.fn.expand('~/dotfiles/nvim/init.lua'))
+```
+Then run `nvim` once to let lazy.nvim install plugins (Telescope, etc.).
+Fuzzy file find: `<leader>ff` (files), `<leader>fg` (live grep), `Ctrl-p` (files), rooted at nvim's cwd.
 
 # For iTerm2
 - need to enable mouse reporting in iTerm2 settings
