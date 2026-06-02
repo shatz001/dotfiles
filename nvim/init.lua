@@ -42,6 +42,30 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>fo', function() builtin.oldfiles({ cwd_only = true }) end, { desc = 'Telescope: recent files (this repo)' })
       vim.keymap.set('n', '<leader>fO', builtin.oldfiles,    { desc = 'Telescope: recent files (global)' })
       vim.keymap.set('n', '<C-p>',      builtin.find_files, { desc = 'Telescope: find files' })
+
+      -- Fuzzy-find a directory, then open it in oil to browse around.
+      -- Uses fd if installed (fast, gitignore-aware), else falls back to find.
+      vim.keymap.set('n', '<leader>fd', function()
+        local find_command = vim.fn.executable('fd') == 1
+          and { 'fd', '--type', 'd', '--hidden', '--exclude', '.git' }
+          or { 'find', '.', '-type', 'd', '-not', '-path', '*/.git/*' }
+        local actions = require('telescope.actions')
+        local action_state = require('telescope.actions.state')
+        builtin.find_files({
+          prompt_title = 'Find directory (open in oil)',
+          find_command = find_command,
+          attach_mappings = function(prompt_bufnr)
+            actions.select_default:replace(function()
+              local entry = action_state.get_selected_entry()
+              actions.close(prompt_bufnr)
+              if entry then
+                require('oil').open(vim.fn.fnamemodify(entry.path or entry[1], ':p'))
+              end
+            end)
+            return true
+          end,
+        })
+      end, { desc = 'Telescope: find directory -> open in oil' })
     end,
   },
 
