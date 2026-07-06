@@ -9,6 +9,20 @@ vim.cmd('source ~/dotfiles/vimrc')
 -- ── Editor options ────────────────────────────────────────────────────
 vim.opt.number = true          -- show absolute line numbers
 
+local function open_diffview_against_base()
+  vim.ui.input({
+    prompt = 'Diff base branch: ',
+    default = 'shatz/bc-set-speed-bucket-materialisation',
+  }, function(base)
+    if not base or base == '' then
+      return
+    end
+    vim.cmd('DiffviewOpen ' .. vim.fn.fnameescape(base) .. '...HEAD')
+  end)
+end
+
+vim.api.nvim_create_user_command('DiffviewOpenBase', open_diffview_against_base, {})
+
 -- ── Bootstrap lazy.nvim (plugin manager) ──────────────────────────────
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -82,6 +96,7 @@ require('lazy').setup({
         dashboard.button('R', 'Recent files (global)', "<cmd>lua require('telescope.builtin').oldfiles()<cr>"),
         dashboard.button('g', 'Live grep',    '<cmd>Telescope live_grep<cr>'),
         dashboard.button('d', 'Diff branch vs origin/main', '<cmd>DiffviewOpen origin/main...HEAD<cr>'),
+        dashboard.button('b', 'Diff branch vs base...',     '<cmd>DiffviewOpenBase<cr>'),
         dashboard.button('D', 'Diff uncommitted changes',   '<cmd>DiffviewOpen<cr>'),
         dashboard.button('H', 'Diff branch history',        '<cmd>DiffviewFileHistory<cr>'),
         dashboard.button('e', 'New file',     '<cmd>ene <bar> startinsert<cr>'),
@@ -92,7 +107,7 @@ require('lazy').setup({
         '',
         'find files:  Ctrl-p   or  <leader>ff',
         'live grep:   <leader>fg',
-        'diffs:       d branch   D uncommitted   H history',
+        'diffs:       d main   b base   D uncommitted   H history',
         'all keys:    press <leader> and wait  (which-key)',
         '(leader = \\)',
       }
@@ -123,6 +138,7 @@ require('lazy').setup({
   -- a side-by-side diff in full file context. The right (working-tree) pane is a
   -- real buffer you can edit and :w. `\d` prefix (which-key shows the group).
   --   \dr  review whole branch vs origin/main   (:DiffviewOpen origin/main...HEAD)
+  --   \db  review whole branch vs a prompted base branch
   --   \dd  uncommitted working-tree changes
   --   \dh  history of the current file          \dH  history of the branch
   --   \dq  close the diff view
@@ -134,6 +150,7 @@ require('lazy').setup({
       require('diffview').setup({})
       local map = vim.keymap.set
       map('n', '<leader>dr', '<cmd>DiffviewOpen origin/main...HEAD<cr>', { desc = 'Diff: review branch vs origin/main' })
+      map('n', '<leader>db', '<cmd>DiffviewOpenBase<cr>',                { desc = 'Diff: review branch vs base...' })
       map('n', '<leader>dd', '<cmd>DiffviewOpen<cr>',                    { desc = 'Diff: uncommitted changes' })
       map('n', '<leader>dh', '<cmd>DiffviewFileHistory %<cr>',          { desc = 'Diff: history of current file' })
       map('n', '<leader>dH', '<cmd>DiffviewFileHistory<cr>',            { desc = 'Diff: history of branch' })
