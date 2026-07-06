@@ -81,6 +81,9 @@ require('lazy').setup({
         dashboard.button('r', 'Recent files (repo)',   "<cmd>lua require('telescope.builtin').oldfiles({ cwd_only = true })<cr>"),
         dashboard.button('R', 'Recent files (global)', "<cmd>lua require('telescope.builtin').oldfiles()<cr>"),
         dashboard.button('g', 'Live grep',    '<cmd>Telescope live_grep<cr>'),
+        dashboard.button('d', 'Diff branch vs origin/main', '<cmd>DiffviewOpen origin/main...HEAD<cr>'),
+        dashboard.button('D', 'Diff uncommitted changes',   '<cmd>DiffviewOpen<cr>'),
+        dashboard.button('H', 'Diff branch history',        '<cmd>DiffviewFileHistory<cr>'),
         dashboard.button('e', 'New file',     '<cmd>ene <bar> startinsert<cr>'),
         dashboard.button('q', 'Quit',         '<cmd>qa<cr>'),
       }
@@ -89,6 +92,7 @@ require('lazy').setup({
         '',
         'find files:  Ctrl-p   or  <leader>ff',
         'live grep:   <leader>fg',
+        'diffs:       d branch   D uncommitted   H history',
         'all keys:    press <leader> and wait  (which-key)',
         '(leader = \\)',
       }
@@ -112,6 +116,28 @@ require('lazy').setup({
     config = function()
       require('oil').setup()
       vim.keymap.set('n', '-', '<cmd>Oil<cr>', { desc = 'Open parent directory (oil)' })
+    end,
+  },
+
+  -- VSCode-style diff review: a file panel lists every changed file; <cr> opens
+  -- a side-by-side diff in full file context. The right (working-tree) pane is a
+  -- real buffer you can edit and :w. `\d` prefix (which-key shows the group).
+  --   \dr  review whole branch vs origin/main   (:DiffviewOpen origin/main...HEAD)
+  --   \dd  uncommitted working-tree changes
+  --   \dh  history of the current file          \dH  history of the branch
+  --   \dq  close the diff view
+  -- In the file panel: j/k move, <cr> opens, <tab>/<s-tab> cycle files, g? = help.
+  {
+    'sindrets/diffview.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim' },  -- already pulled in by telescope
+    config = function()
+      require('diffview').setup({})
+      local map = vim.keymap.set
+      map('n', '<leader>dr', '<cmd>DiffviewOpen origin/main...HEAD<cr>', { desc = 'Diff: review branch vs origin/main' })
+      map('n', '<leader>dd', '<cmd>DiffviewOpen<cr>',                    { desc = 'Diff: uncommitted changes' })
+      map('n', '<leader>dh', '<cmd>DiffviewFileHistory %<cr>',          { desc = 'Diff: history of current file' })
+      map('n', '<leader>dH', '<cmd>DiffviewFileHistory<cr>',            { desc = 'Diff: history of branch' })
+      map('n', '<leader>dq', '<cmd>DiffviewClose<cr>',                  { desc = 'Diff: close' })
     end,
   },
 })
