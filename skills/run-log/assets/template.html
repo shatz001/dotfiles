@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Run Log</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.45;
+      margin: 32px;
+      max-width: 1180px;
+      color: #1f2933;
+    }
+    h1, h2, h3 { line-height: 1.2; }
+    details {
+      border: 1px solid #c7d2df;
+      border-radius: 6px;
+      margin: 16px 0;
+      padding: 12px 16px;
+      background: #fbfcfe;
+    }
+    summary { cursor: pointer; font-weight: 700; }
+    code, pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    }
+    /* Command/code blocks WRAP instead of scrolling horizontally: long commands
+       spill onto as many lines as needed, and long unbroken tokens (URLs, paths)
+       are broken so nothing is ever hidden off-screen. */
+    pre {
+      background: #111827;
+      color: #f9fafb;
+      padding: 12px;
+      border-radius: 6px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+    table { border-collapse: collapse; width: 100%; margin: 10px 0 18px; }
+    th, td { border: 1px solid #d8e0ea; padding: 6px 8px; text-align: left; vertical-align: top; }
+    th { background: #eef3f8; }
+    td:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+    .pending  { color: #8a5a00; font-weight: 700; }
+    .running  { color: #0f5f96; font-weight: 700; }
+    .complete { color: #146c43; font-weight: 700; }
+    .failed   { color: #a61b1b; font-weight: 700; }
+    .note { color: #52606d; }
+  </style>
+</head>
+<body>
+  <h1>Run Log</h1>
+  <p><strong>Created:</strong> <code>YYYY-MM-DD</code></p>
+  <p class="note">One entry per run. Newest at the bottom. Append; do not overwrite past entries.</p>
+
+  <details id="how-to-use">
+    <summary>How to use this log</summary>
+    <p>Add one <code>&lt;details&gt;</code> block per run (copy the example below). Set the
+    Status paragraph's class to one of <code>pending</code> / <code>running</code> /
+    <code>complete</code> / <code>failed</code>. Paste the launch command verbatim into the
+    <code>&lt;pre&gt;&lt;code&gt;</code> block — it wraps, so never truncate it. When the run
+    finishes, flip the status (with finish time + duration) and fill in Results: a one-line
+    summary, and a table if there is tabular output.</p>
+  </details>
+
+  <details id="example-run" open>
+    <summary>Example run — remove or replace</summary>
+    <h2>Status</h2>
+    <p class="complete">Succeeded. Started: 2026-01-01T09:00:00Z. Completed: 2026-01-01T11:30:00Z. Duration: 9000s.</p>
+    <h2>Command</h2>
+    <pre><code>python -m my_project.train --config configs/baseline.yaml --data /data/dataset/v3 --output /runs/exp-042 --epochs 50 --batch-size 256 --lr 3e-4 --optimizer adamw --weight-decay 0.05 --warmup-steps 2000 --grad-clip 1.0 --mixed-precision bf16 --num-workers 16 --seed 1234 --resume-from /runs/exp-041/checkpoints/last.ckpt --wandb-project my-experiments --wandb-run exp-042</code></pre>
+    <h2>Link</h2>
+    <p><a href="https://example.com/runs/exp-042">exp-042 dashboard</a></p>
+    <h2>Notes</h2>
+    <p>What this run is and why it exists. Reproducibility: commit <code>abc1234</code>, image
+    <code>my-image:tag</code>, env / dataset version. If it is a variant, note what changed vs the
+    baseline and what you validated before launching.</p>
+    <h2>Results</h2>
+    <p><strong>Output:</strong> <code>/runs/exp-042</code></p>
+    <p><strong>Headline:</strong> final val loss 0.312 (baseline 0.335).</p>
+    <table>
+      <tr><th>Metric</th><th>value</th></tr>
+      <tr><td><code>val_loss</code></td><td>0.312</td></tr>
+      <tr><td><code>train_samples_seen</code></td><td>128,000,000</td></tr>
+      <tr><td><code><strong>new_metric_added_this_run</strong></code></td><td>0.87</td></tr>
+    </table>
+  </details>
+</body>
+</html>

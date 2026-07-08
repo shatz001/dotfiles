@@ -57,6 +57,25 @@ Install zsh pls (`sudo apt-get install zsh`). Then `sudo chsh -s $(which zsh)` a
 - `curl -fsSL https://claude.ai/install.sh | bash` <[source](https://code.claude.com/docs/en/setup#:~:text=macOS%2C%20Linux%2C%20WSL%3A,Ask%20AI)>
 - `npm i -g @openai/codex` <[source](https://developers.openai.com/codex/cli/#:~:text=1-,Install,-Install%20the%20Codex)>
 
+# AI skills (shared across Claude Code & Codex)
+Reusable agent skills live in `skills/<name>/` (harness-agnostic; each has a `SKILL.md`). Symlink them into each tool so one source works everywhere.
+
+**Claude Code** — skills are directories under `~/.claude/skills/`:
+```
+mkdir -p ~/.claude/skills
+ln -s ~/dotfiles/skills/run-log ~/.claude/skills/run-log
+```
+Then invoke with `/run-log`.
+
+**Codex** — custom prompts are single files under `~/.codex/prompts/`:
+```
+mkdir -p ~/.codex/prompts
+ln -s ~/dotfiles/skills/run-log/SKILL.md ~/.codex/prompts/run-log.md
+```
+Then invoke with `/run-log`. Codex loads only the prompt file, so the skill's `assets/template.html` stays in `~/dotfiles/skills/run-log/assets/` — reference it by that path.
+
+⚠️ Symlink individual skill dirs/files only — never symlink all of `~/.claude` or `~/.codex`, which hold credentials and session state.
+
 # Setting up a mac 🍏 laptop for the first time
 <details>
   <summary>click here</summary>
