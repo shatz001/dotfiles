@@ -67,12 +67,14 @@ ln -s ~/dotfiles/skills/run-log ~/.claude/skills/run-log
 ```
 Then invoke with `/run-log`.
 
-**Codex** — custom prompts are single files under `~/.codex/prompts/`:
+**Codex** — skills are directories under `~/.agents/skills/`:
 ```
-mkdir -p ~/.codex/prompts
-ln -s ~/dotfiles/skills/run-log/SKILL.md ~/.codex/prompts/run-log.md
+mkdir -p ~/.agents/skills
+ln -s ~/dotfiles/skills/run-log ~/.agents/skills/run-log
 ```
-Then invoke with `/run-log`. Codex loads only the prompt file, so the skill's `assets/template.html` stays in `~/dotfiles/skills/run-log/assets/` — reference it by that path.
+Then invoke through `/skills` or mention `$run-log`. Codex sees the whole skill directory, including `assets/template.html`.
+
+Do not link `SKILL.md` into `~/.codex/prompts/` for this. That path is for deprecated custom prompts and only loads the single Markdown file, so it misses the skill assets.
 
 ⚠️ Symlink individual skill dirs/files only — never symlink all of `~/.claude` or `~/.codex`, which hold credentials and session state.
 
