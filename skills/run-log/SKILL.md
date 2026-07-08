@@ -12,10 +12,11 @@ description: >-
 # Run log
 
 Maintain a single self-contained HTML file that logs a series of runs — one
-collapsible `<details>` entry per run. It is plain HTML with inline CSS so it
-opens in any browser and can be shared as a file or committed to a repo. It is
-deliberately domain-agnostic: a "run" can be a training job, a batch script, a
-data pipeline, a benchmark sweep, etc.
+collapsible `<details>` entry per run. All collapsible sections should be folded
+by default: do not add the `open` attribute to any `<details>` element. It is
+plain HTML with inline CSS so it opens in any browser and can be shared as a
+file or committed to a repo. It is deliberately domain-agnostic: a "run" can be
+a training job, a batch script, a data pipeline, a benchmark sweep, etc.
 
 ## Files in this skill
 
@@ -31,7 +32,8 @@ meta header. If a log already exists, append to it instead of overwriting.
 
 ## Adding a run (when a run is launched)
 
-Insert one `<details>` block per run, immediately before `</body>`:
+Insert one folded-by-default `<details>` block per run, immediately before
+`</body>`. Do not add an `open` attribute:
 
 ```html
 <details>
@@ -84,5 +86,7 @@ then fill in Results:
   truncate a command to avoid horizontal scrolling.
 - Prefer absolute, copy-pasteable commands and links.
 - One entry per run; append, never overwrite a previous run's entry.
+- Keep every `<details>` section folded by default. Never add the `open`
+  attribute unless the user explicitly asks for an expanded section.
 - Record reproducibility details in Notes (commit / version / image / env) so an
   entry is meaningful long after the run.
